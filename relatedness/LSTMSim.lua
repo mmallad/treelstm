@@ -235,11 +235,11 @@ function LSTMSim:BiLSTM_backward(lsent, rsent, linputs, rinputs, rep_grad)
 end
 
 -- Predict the similarity of a sentence pair.
-function LSTMSim:predict(lsent, rsent)
+function LSTMSim:predict(linputs, rinputs)
   self.llstm:evaluate()
   self.rlstm:evaluate()
-  local linputs = self.emb_vecs:index(1, lsent:long()):double()
-  local rinputs = self.emb_vecs:index(1, rsent:long()):double()
+  --local linputs = self.emb_vecs:index(1, lsent:long()):double()
+  --local rinputs = self.emb_vecs:index(1, rsent:long()):double()
   local inputs
   if self.structure == 'lstm' then
     inputs = {self.llstm:forward(linputs), self.rlstm:forward(rinputs)}

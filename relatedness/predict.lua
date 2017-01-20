@@ -1,7 +1,7 @@
 require('..')
 local model_class
 model_class = treelstm.LSTMSim
-local loaded = model_class.load('/home/ubuntu/data/treelstm/trained_models2/rel-bilstm.1l.150d.1.th')
+local loaded = model_class.load('/home/ubuntu/treelstm/trained_models/rel-bilstm.1l.150d.1.th')
 
 --print(loaded)
 local lsent = 'My wife is slicing potatoes'
@@ -39,6 +39,7 @@ function getVectors(words)
   		end
 		i = i + 1
 	end
+	print(vecs)
 	return vecs
 end
 
