@@ -3,12 +3,15 @@ local model_class
 model_class = treelstm.LSTMSim
 local loaded = model_class.load('/home/ubuntu/treelstm/trained_models/rel-bilstm.1l.150d.1.th')
 
---print(loaded)
-local lsent = 'My wife is slicing potatoes'
-local rsent = 'We are going to watch movie tonight'
+--print(arg[1])
+--print(arg[2])
 
-print('loading word embeddings')
-local emb_dir = 'data/glove/'
+--print(loaded)
+local lsent = arg[1]--'My wife is slicing potatoes'
+local rsent = arg[2]--'We are going to watch movie tonight'
+
+--print('loading word embeddings')
+local emb_dir = '/home/ubuntu/treelstm/data/glove/'
 local emb_prefix = emb_dir .. 'glove.840B'
 local emb_vocab, emb_vecs = treelstm.read_embedding(emb_prefix .. '.vocab', emb_prefix .. '.300d.th')
 local emb_dim = emb_vecs:size(2)
@@ -25,7 +28,7 @@ function getVectors(words)
 	local count = 0
 	for index, word in pairs(words) do
 		count = count + 1
-		print(word)	
+		--print(word)	
 	end
 	local num_unk = 0
 	local vecs = torch.Tensor(count, emb_dim)
@@ -39,7 +42,7 @@ function getVectors(words)
   		end
 		i = i + 1
 	end
-	print(vecs)
+	--print(vecs)
 	return vecs
 end
 
