@@ -1,5 +1,4 @@
-require('..')
-model_class
+require('../init')
 model_class = treelstm.LSTMSim
 loaded = model_class.load('/home/ubuntu/treelstm/trained_models/rel-bilstm.1l.150d.1.th')
 

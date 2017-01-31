@@ -21,7 +21,7 @@ include('relatedness/TreeLSTMSim.lua')
 include('sentiment/LSTMSentiment.lua')
 include('sentiment/TreeLSTMSentiment.lua')
 
-printf = utils.printf
+--printf = utils.printf
 
 -- global paths (modify if desired)
 treelstm.data_dir        = 'data'

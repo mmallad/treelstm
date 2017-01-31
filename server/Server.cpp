@@ -1,10 +1,10 @@
 //Lua c headers
-extern "C" {
+/*extern "C" {
         #include "lua.h"
         #include "lauxlib.h"
         #include "lualib.h"
-}
-
+}*/
+#include "lua.hpp"
 #include "TextService.h"
 #include <thrift/protocol/TBinaryProtocol.h>
 #include <thrift/server/TSimpleServer.h>
@@ -59,14 +59,15 @@ int main(int argc, char **argv) {
   //Starting Lua Script
   //lua_State *L;
   L = luaL_newstate();
+  //luaJIT_setmode(L, -1, LUAJIT_MODE_WRAPCFUNC|LUAJIT_MODE_ON);
   luaL_openlibs(L);
-  if (luaL_loadfile(L, "/usr/local/iloop/treelstm/relatedness/server.lua")){
-	std::cout << "Error while loading file. Maybe its due to file was not found." << std::endl;
+  if(luaL_loadfile(L, "relatedness/server.lua")){
+	std::cout << "Error while loading file. Maybe its due to file was not found. " <<  lua_tostring(L, -1)  << std::endl;
 	lua_close(L);
 	return 1;
   }
   if (lua_pcall(L, 0, 0, 0)){
-	std::cout << "Could not load given script file. Please check script." << std::endl;
+	std::cout << "Could not load given script file. Please check script. " <<  lua_tostring(L, -1) << std::endl;
 	lua_close(L);
         return 1;
   }
