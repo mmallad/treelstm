@@ -39,6 +39,22 @@ class TextServiceHandler : virtual public TextServiceIf {
   	}
 	return lua_tonumber(L, -1);
   }
+  int32_t getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects) {
+  	double score = -1.0;
+	int32_t index = -1;
+	int32_t i = 0;
+	for(Suubjects subject: subjects){
+		for(std::string text : subject.text){
+			double tempScore = this->getSimilarityScore(ls, text);
+			if(tempScore > score){
+				score = tempScore;
+				index = i;
+			}
+		}
+		i++;
+	}
+	return index;
+  }
 };
 
 int main(int argc, char **argv) {

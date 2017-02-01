@@ -4,13 +4,14 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-#include "idl_types.h"
+#include "text_constants.h"
 
-#include <algorithm>
-#include <ostream>
 
-#include <thrift/TToString.h>
 
+const textConstants g_text_constants;
+
+textConstants::textConstants() {
+}
 
 
 

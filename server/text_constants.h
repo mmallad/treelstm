@@ -4,20 +4,20 @@
  * DO NOT EDIT UNLESS YOU ARE SURE THAT YOU KNOW WHAT YOU ARE DOING
  *  @generated
  */
-#ifndef idl_CONSTANTS_H
-#define idl_CONSTANTS_H
+#ifndef text_CONSTANTS_H
+#define text_CONSTANTS_H
 
-#include "idl_types.h"
+#include "text_types.h"
 
 
 
-class idlConstants {
+class textConstants {
  public:
-  idlConstants();
+  textConstants();
 
 };
 
-extern const idlConstants g_idl_constants;
+extern const textConstants g_text_constants;
 
 
 

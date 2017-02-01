@@ -9,7 +9,7 @@
 
 #include <thrift/TDispatchProcessor.h>
 #include <thrift/async/TConcurrentClientSyncInfo.h>
-#include "idl_types.h"
+#include "text_types.h"
 
 
 
@@ -22,6 +22,7 @@ class TextServiceIf {
  public:
   virtual ~TextServiceIf() {}
   virtual double getSimilarityScore(const std::string& ls, const std::string& rs) = 0;
+  virtual int32_t getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects) = 0;
 };
 
 class TextServiceIfFactory {
@@ -53,6 +54,10 @@ class TextServiceNull : virtual public TextServiceIf {
   virtual ~TextServiceNull() {}
   double getSimilarityScore(const std::string& /* ls */, const std::string& /* rs */) {
     double _return = (double)0;
+    return _return;
+  }
+  int32_t getSimilarityScoreByIndex(const std::string& /* ls */, const std::vector<Suubjects> & /* subjects */) {
+    int32_t _return = 0;
     return _return;
   }
 };
@@ -168,6 +173,117 @@ class TextService_getSimilarityScore_presult {
 
 };
 
+typedef struct _TextService_getSimilarityScoreByIndex_args__isset {
+  _TextService_getSimilarityScoreByIndex_args__isset() : ls(false), subjects(false) {}
+  bool ls :1;
+  bool subjects :1;
+} _TextService_getSimilarityScoreByIndex_args__isset;
+
+class TextService_getSimilarityScoreByIndex_args {
+ public:
+
+  TextService_getSimilarityScoreByIndex_args(const TextService_getSimilarityScoreByIndex_args&);
+  TextService_getSimilarityScoreByIndex_args& operator=(const TextService_getSimilarityScoreByIndex_args&);
+  TextService_getSimilarityScoreByIndex_args() : ls() {
+  }
+
+  virtual ~TextService_getSimilarityScoreByIndex_args() throw();
+  std::string ls;
+  std::vector<Suubjects>  subjects;
+
+  _TextService_getSimilarityScoreByIndex_args__isset __isset;
+
+  void __set_ls(const std::string& val);
+
+  void __set_subjects(const std::vector<Suubjects> & val);
+
+  bool operator == (const TextService_getSimilarityScoreByIndex_args & rhs) const
+  {
+    if (!(ls == rhs.ls))
+      return false;
+    if (!(subjects == rhs.subjects))
+      return false;
+    return true;
+  }
+  bool operator != (const TextService_getSimilarityScoreByIndex_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const TextService_getSimilarityScoreByIndex_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class TextService_getSimilarityScoreByIndex_pargs {
+ public:
+
+
+  virtual ~TextService_getSimilarityScoreByIndex_pargs() throw();
+  const std::string* ls;
+  const std::vector<Suubjects> * subjects;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _TextService_getSimilarityScoreByIndex_result__isset {
+  _TextService_getSimilarityScoreByIndex_result__isset() : success(false) {}
+  bool success :1;
+} _TextService_getSimilarityScoreByIndex_result__isset;
+
+class TextService_getSimilarityScoreByIndex_result {
+ public:
+
+  TextService_getSimilarityScoreByIndex_result(const TextService_getSimilarityScoreByIndex_result&);
+  TextService_getSimilarityScoreByIndex_result& operator=(const TextService_getSimilarityScoreByIndex_result&);
+  TextService_getSimilarityScoreByIndex_result() : success(0) {
+  }
+
+  virtual ~TextService_getSimilarityScoreByIndex_result() throw();
+  int32_t success;
+
+  _TextService_getSimilarityScoreByIndex_result__isset __isset;
+
+  void __set_success(const int32_t val);
+
+  bool operator == (const TextService_getSimilarityScoreByIndex_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const TextService_getSimilarityScoreByIndex_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const TextService_getSimilarityScoreByIndex_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _TextService_getSimilarityScoreByIndex_presult__isset {
+  _TextService_getSimilarityScoreByIndex_presult__isset() : success(false) {}
+  bool success :1;
+} _TextService_getSimilarityScoreByIndex_presult__isset;
+
+class TextService_getSimilarityScoreByIndex_presult {
+ public:
+
+
+  virtual ~TextService_getSimilarityScoreByIndex_presult() throw();
+  int32_t* success;
+
+  _TextService_getSimilarityScoreByIndex_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class TextServiceClient : virtual public TextServiceIf {
  public:
   TextServiceClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -196,6 +312,9 @@ class TextServiceClient : virtual public TextServiceIf {
   double getSimilarityScore(const std::string& ls, const std::string& rs);
   void send_getSimilarityScore(const std::string& ls, const std::string& rs);
   double recv_getSimilarityScore();
+  int32_t getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects);
+  void send_getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects);
+  int32_t recv_getSimilarityScoreByIndex();
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -212,10 +331,12 @@ class TextServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   typedef std::map<std::string, ProcessFunction> ProcessMap;
   ProcessMap processMap_;
   void process_getSimilarityScore(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getSimilarityScoreByIndex(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   TextServiceProcessor(boost::shared_ptr<TextServiceIf> iface) :
     iface_(iface) {
     processMap_["getSimilarityScore"] = &TextServiceProcessor::process_getSimilarityScore;
+    processMap_["getSimilarityScoreByIndex"] = &TextServiceProcessor::process_getSimilarityScoreByIndex;
   }
 
   virtual ~TextServiceProcessor() {}
@@ -253,6 +374,15 @@ class TextServiceMultiface : virtual public TextServiceIf {
     return ifaces_[i]->getSimilarityScore(ls, rs);
   }
 
+  int32_t getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getSimilarityScoreByIndex(ls, subjects);
+    }
+    return ifaces_[i]->getSimilarityScoreByIndex(ls, subjects);
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -286,6 +416,9 @@ class TextServiceConcurrentClient : virtual public TextServiceIf {
   double getSimilarityScore(const std::string& ls, const std::string& rs);
   int32_t send_getSimilarityScore(const std::string& ls, const std::string& rs);
   double recv_getSimilarityScore(const int32_t seqid);
+  int32_t getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects);
+  int32_t send_getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects);
+  int32_t recv_getSimilarityScoreByIndex(const int32_t seqid);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
