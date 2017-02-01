@@ -46,7 +46,7 @@ class TextServiceHandler : virtual public TextServiceIf {
 	for(Suubjects subject: subjects){
 		for(std::string text : subject.text){
 			double tempScore = this->getSimilarityScore(ls, text);
-			if(tempScore > score){
+			if(tempScore > 3.5 && tempScore > score){
 				score = tempScore;
 				index = i;
 			}
