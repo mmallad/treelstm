@@ -1,9 +1,9 @@
 require('../init')
 model_class = treelstm.LSTMSim
-loaded = model_class.load('/home/ubuntu/treelstm/trained_models/rel-bilstm.1l.150d.1.th')
+loaded = model_class.load('/usr/local/iloop/treelstm/trained_models/rel-bilstm.1l.150d.1.th')
 
 print('loading word embeddings')
-emb_dir = '/home/ubuntu/treelstm/data/glove/'
+emb_dir = '/usr/local/iloop/treelstm/data/glove/'
 emb_prefix = emb_dir .. 'glove.840B'
 emb_vocab, emb_vecs = treelstm.read_embedding(emb_prefix .. '.vocab', emb_prefix .. '.300d.th')
 emb_dim = emb_vecs:size(2)
