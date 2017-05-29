@@ -23,6 +23,7 @@ class TextServiceIf {
   virtual ~TextServiceIf() {}
   virtual double getSimilarityScore(const std::string& ls, const std::string& rs) = 0;
   virtual int32_t getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects) = 0;
+  virtual void getLabel(std::string& _return, const std::string& ls) = 0;
 };
 
 class TextServiceIfFactory {
@@ -59,6 +60,9 @@ class TextServiceNull : virtual public TextServiceIf {
   int32_t getSimilarityScoreByIndex(const std::string& /* ls */, const std::vector<Suubjects> & /* subjects */) {
     int32_t _return = 0;
     return _return;
+  }
+  void getLabel(std::string& /* _return */, const std::string& /* ls */) {
+    return;
   }
 };
 
@@ -284,6 +288,110 @@ class TextService_getSimilarityScoreByIndex_presult {
 
 };
 
+typedef struct _TextService_getLabel_args__isset {
+  _TextService_getLabel_args__isset() : ls(false) {}
+  bool ls :1;
+} _TextService_getLabel_args__isset;
+
+class TextService_getLabel_args {
+ public:
+
+  TextService_getLabel_args(const TextService_getLabel_args&);
+  TextService_getLabel_args& operator=(const TextService_getLabel_args&);
+  TextService_getLabel_args() : ls() {
+  }
+
+  virtual ~TextService_getLabel_args() throw();
+  std::string ls;
+
+  _TextService_getLabel_args__isset __isset;
+
+  void __set_ls(const std::string& val);
+
+  bool operator == (const TextService_getLabel_args & rhs) const
+  {
+    if (!(ls == rhs.ls))
+      return false;
+    return true;
+  }
+  bool operator != (const TextService_getLabel_args &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const TextService_getLabel_args & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+
+class TextService_getLabel_pargs {
+ public:
+
+
+  virtual ~TextService_getLabel_pargs() throw();
+  const std::string* ls;
+
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _TextService_getLabel_result__isset {
+  _TextService_getLabel_result__isset() : success(false) {}
+  bool success :1;
+} _TextService_getLabel_result__isset;
+
+class TextService_getLabel_result {
+ public:
+
+  TextService_getLabel_result(const TextService_getLabel_result&);
+  TextService_getLabel_result& operator=(const TextService_getLabel_result&);
+  TextService_getLabel_result() : success() {
+  }
+
+  virtual ~TextService_getLabel_result() throw();
+  std::string success;
+
+  _TextService_getLabel_result__isset __isset;
+
+  void __set_success(const std::string& val);
+
+  bool operator == (const TextService_getLabel_result & rhs) const
+  {
+    if (!(success == rhs.success))
+      return false;
+    return true;
+  }
+  bool operator != (const TextService_getLabel_result &rhs) const {
+    return !(*this == rhs);
+  }
+
+  bool operator < (const TextService_getLabel_result & ) const;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+  uint32_t write(::apache::thrift::protocol::TProtocol* oprot) const;
+
+};
+
+typedef struct _TextService_getLabel_presult__isset {
+  _TextService_getLabel_presult__isset() : success(false) {}
+  bool success :1;
+} _TextService_getLabel_presult__isset;
+
+class TextService_getLabel_presult {
+ public:
+
+
+  virtual ~TextService_getLabel_presult() throw();
+  std::string* success;
+
+  _TextService_getLabel_presult__isset __isset;
+
+  uint32_t read(::apache::thrift::protocol::TProtocol* iprot);
+
+};
+
 class TextServiceClient : virtual public TextServiceIf {
  public:
   TextServiceClient(boost::shared_ptr< ::apache::thrift::protocol::TProtocol> prot) {
@@ -315,6 +423,9 @@ class TextServiceClient : virtual public TextServiceIf {
   int32_t getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects);
   void send_getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects);
   int32_t recv_getSimilarityScoreByIndex();
+  void getLabel(std::string& _return, const std::string& ls);
+  void send_getLabel(const std::string& ls);
+  void recv_getLabel(std::string& _return);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
@@ -332,11 +443,13 @@ class TextServiceProcessor : public ::apache::thrift::TDispatchProcessor {
   ProcessMap processMap_;
   void process_getSimilarityScore(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
   void process_getSimilarityScoreByIndex(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
+  void process_getLabel(int32_t seqid, ::apache::thrift::protocol::TProtocol* iprot, ::apache::thrift::protocol::TProtocol* oprot, void* callContext);
  public:
   TextServiceProcessor(boost::shared_ptr<TextServiceIf> iface) :
     iface_(iface) {
     processMap_["getSimilarityScore"] = &TextServiceProcessor::process_getSimilarityScore;
     processMap_["getSimilarityScoreByIndex"] = &TextServiceProcessor::process_getSimilarityScoreByIndex;
+    processMap_["getLabel"] = &TextServiceProcessor::process_getLabel;
   }
 
   virtual ~TextServiceProcessor() {}
@@ -383,6 +496,16 @@ class TextServiceMultiface : virtual public TextServiceIf {
     return ifaces_[i]->getSimilarityScoreByIndex(ls, subjects);
   }
 
+  void getLabel(std::string& _return, const std::string& ls) {
+    size_t sz = ifaces_.size();
+    size_t i = 0;
+    for (; i < (sz - 1); ++i) {
+      ifaces_[i]->getLabel(_return, ls);
+    }
+    ifaces_[i]->getLabel(_return, ls);
+    return;
+  }
+
 };
 
 // The 'concurrent' client is a thread safe client that correctly handles
@@ -419,6 +542,9 @@ class TextServiceConcurrentClient : virtual public TextServiceIf {
   int32_t getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects);
   int32_t send_getSimilarityScoreByIndex(const std::string& ls, const std::vector<Suubjects> & subjects);
   int32_t recv_getSimilarityScoreByIndex(const int32_t seqid);
+  void getLabel(std::string& _return, const std::string& ls);
+  int32_t send_getLabel(const std::string& ls);
+  void recv_getLabel(std::string& _return, const int32_t seqid);
  protected:
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> piprot_;
   boost::shared_ptr< ::apache::thrift::protocol::TProtocol> poprot_;
