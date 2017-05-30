@@ -12,6 +12,7 @@
 #include <thrift/transport/TBufferTransports.h>
 #include <thrift/processor/TMultiplexedProcessor.h>
 #include <thrift/server/TNonblockingServer.h>
+#include <boost/algorithm/string.hpp>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -41,8 +42,12 @@ public:
   }
   double getSimilarityScore(const std::string& ls, const std::string& rs) {
 	lua_getglobal(L, "getScore"); 
-	lua_pushstring(L, ls.c_str());
-	lua_pushstring(L, rs.c_str());
+	std::string tls = ls;
+	std::string trs = rs;
+	boost::trim(tls);
+	boost::trim(trs);
+	lua_pushstring(L, tls.c_str());
+	lua_pushstring(L, trs.c_str());
 	if (lua_pcall(L, 2, 1, 0)){
 		std::cout << "Error calling lua function." << std::endl;
 		return -1.0;
@@ -81,17 +86,23 @@ public:
     std::string label = "NO_LABEL";
     while (std::getline(*this->inputFile, inputLine)){
         std::vector<std::string> parts = this->split(inputLine, '\t');
+	std::string rs = parts.front();
+	std::string tls = ls;
+	boost::trim(rs);
+	boost::trim(tls);
+	if(boost::iequals(tls, rs)){
+		label = parts.back();
+		break;
+	}
 	//std::cout << "Input : " << parts.front() << " Label : " << parts.back() << std::endl;
 	double tempScore = this->getSimilarityScore(ls, parts.front());
-	//std::cout << "Input : " << parts.front() << " Label : " << parts.back();
+	//std::cout << "Input : " << parts.front() << " Label : " << parts.back() << " Score : " << tempScore << std::endl;
 	//double tempScore = this->getSimilarityScore(ls, parts.front());
-	if(tempScore > 3.5 && tempScore > score){
+	if(tempScore >= 3 && tempScore > score){
 		score = tempScore;
 		//std::cout << "Score : " << score << " " << std::endl;
 		label = parts.back();
-		if(tempScore > 4.5) break;
-	}else{
-		std::cout << std::endl;
+		if(tempScore >= 4.5) break;
 	}
     }
     //std::cout << "Label : " << label << std::endl;
@@ -123,9 +134,9 @@ int main2(int argc, char **argv){
 	lua_close(L);
 	return 0;
 }
-int main2(int argc, char **argv) {
+int main(int argc, char **argv) {
   int port = 9191;
-  std:: string inputFilePath = "/home/innovisto/input_sen.txt";
+  std:: string inputFilePath = "/usr/local/iloop/treelstm/data/input_sen.txt";
   shared_ptr<TextServiceHandler> handler(new TextServiceHandler(inputFilePath));
   shared_ptr<TProcessor> processor(new TextServiceProcessor(handler));
   shared_ptr<TMultiplexedProcessor> multiplexing(new TMultiplexedProcessor());
